@@ -568,6 +568,8 @@
             this.Controls.Add(this.BatImage);
             this.Controls.Add(this.PlayerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
