@@ -169,7 +169,7 @@ namespace Quest
                 switch(monster)
                 {
                     case "Bat":
-                        tempEnermies.Add(new Bat(this, new Point(boundaries.Left + 60, boundaries.Top + 120))); //GetRandomLocation(random)));
+                        tempEnermies.Add(new Bat(this, GetRandomLocation(random)));
                         break;
                     case "Ghost":
                         tempEnermies.Add(new Ghost(this, GetRandomLocation(random)));
