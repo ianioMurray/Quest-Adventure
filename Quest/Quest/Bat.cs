@@ -14,10 +14,20 @@ namespace Quest
         public Bat(Game game, Point currentLocation) :base(game, currentLocation, 6)
         { }
 
-        public override void Move(Random random)
+        public override string Name
         {
+            get
+            {
+                return "bat";
+            }
+        }
+
+        public override string Move(Random random)
+        {
+            string output = "";
             if (!Dead)
             {
+                Point tempLocation = base.location;
                 Direction directionToMove;
                 //50% the bat moves towards the player & 50% moves randomly
                 if (random.Next(2) == 0)
@@ -30,12 +40,15 @@ namespace Quest
                 }
 
                 base.location = base.Move(directionToMove, game.Bourdaries);
+                output += GenerateTextOutputForTheMove(base.location, tempLocation, directionToMove);
 
                 if (NearPlayer(attackRange, random))
                 {
-                    game.HitPlayer(2, random);
+                    int damage = game.HitPlayer(2, random);
+                    output += "The " + Name + " hit the player for " + damage + " points of damage" + Environment.NewLine;
                 }
             }
+            return output;
         }
     }
 }

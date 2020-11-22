@@ -25,16 +25,23 @@ namespace Quest
             }
         }
 
+        abstract public string Name
+        {
+            get;
+        }
+
         public Enermy(Game game, Point location, int hitPoints): base(game, location)
         {
             HitPoints = hitPoints;
         }
 
-        abstract public void Move(Random random);
+        abstract public string Move(Random random);
 
-        public void Hit(int maxDamage, Random random)
+        public string Hit(int maxDamage, Random random)
         {
-            HitPoints = HitPoints - (random.Next(maxDamage) + 1);
+            int damage = (random.Next(maxDamage) + 1);
+            HitPoints = HitPoints - damage;
+            return "The player inflicted " + damage + " points of damage to the " + Name + Environment.NewLine; 
         }
 
         protected bool NearPlayer(int attackRange, Random random)
@@ -80,6 +87,20 @@ namespace Quest
                 directionToMove = Direction.Up;
             }
             return directionToMove;
+        }
+
+        protected string GenerateTextOutputForTheMove(Point newLocation, Point previousLocaiton, Direction directionToMove)
+        {
+            string output = "";
+            if (Nearby(newLocation, previousLocaiton, 0))
+            {
+                output = "The " + Name + " was unable to move" + Environment.NewLine;
+            }
+            else
+            {
+                output = "The " + Name + " moved " + directionToMove.ToString() + Environment.NewLine;
+            }
+            return output;
         }
     }
 }

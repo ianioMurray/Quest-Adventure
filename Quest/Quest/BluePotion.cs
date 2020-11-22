@@ -24,10 +24,10 @@ namespace Quest
             }
         }
 
-        public override void Attack(Direction direction, Random random)
+        public override string Attack(Direction direction, Random random)
         {
-            game.IncreasePlayerHealth(5, random);
             Used = true;
+            return game.IncreasePlayerHealth(5, random);
         }
     }
 }

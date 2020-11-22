@@ -61,6 +61,7 @@
             this.attackDownButton = new System.Windows.Forms.Button();
             this.attackLeftButton = new System.Windows.Forms.Button();
             this.attackUpButton = new System.Windows.Forms.Button();
+            this.outputText = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BatImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GhoulImage)).BeginInit();
@@ -542,6 +543,16 @@
             this.attackUpButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.attackUpButton_MouseDown);
             this.attackUpButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.attackUpButton_MouseUp);
             // 
+            // outputText
+            // 
+            this.outputText.Location = new System.Drawing.Point(147, 392);
+            this.outputText.Multiline = true;
+            this.outputText.Name = "outputText";
+            this.outputText.ReadOnly = true;
+            this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.outputText.Size = new System.Drawing.Size(510, 80);
+            this.outputText.TabIndex = 17;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -550,6 +561,7 @@
             this.BackgroundImage = global::Quest.Properties.Resources.dungeon600x400;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1025, 633);
+            this.Controls.Add(this.outputText);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -592,6 +604,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -630,6 +643,7 @@
         private System.Windows.Forms.Button attackDownButton;
         private System.Windows.Forms.Button attackLeftButton;
         private System.Windows.Forms.Button attackUpButton;
+        private System.Windows.Forms.TextBox outputText;
     }
 }
 

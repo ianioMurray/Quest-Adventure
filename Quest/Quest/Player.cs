@@ -34,16 +34,18 @@ namespace Quest
             HitPoints = 10;
         }
 
-        public void Hit(int maxDamage, Random random)
+        public int Hit(int maxDamage, Random random)
         {
             int damage = random.Next(maxDamage) + 1;
             HitPoints = HitPoints - damage;
+            return damage;
         }
 
-        public void IncreaseHealth(int health, Random random)
+        public string IncreaseHealth(int health, Random random)
         {
             int healedDamage = random.Next(health) + 1;
             HitPoints = HitPoints + healedDamage;
+            return "The player healed themselves " + healedDamage + " points of damage" + Environment.NewLine;
         }
 
         public void Equip(string weaponName)
@@ -57,28 +59,44 @@ namespace Quest
             }
         }
 
-        public void Move(Direction direction)
+        public string Move(Direction direction)
         {
+            string output = "";
+
+            Point tempLocation = base.location;
             base.location = Move(direction, game.Bourdaries);
+
+            if(Nearby(tempLocation, base.location, 0))
+            {
+                output = "The player was unable to move" + Environment.NewLine;
+            }
+            else
+            {
+                output = "The player moved " + direction.ToString() + Environment.NewLine;
+            }
+
             if(!game.WeaponInRoom.PickedUp)
             {
                 if(Nearby(game.WeaponInRoom.Location, StandingOnWeapon))
                 {
                     game.WeaponInRoom.PickUpWeapon();
                     inventory.Add(game.WeaponInRoom);
+                    output += "The player picked up the " + game.WeaponInRoom.Name + Environment.NewLine;
                     if(inventory.Count == 1)
                     {
                         Equip(game.WeaponInRoom.Name);
                     }
                 }
             }
+            return output;
         }
 
-        public void Attack(Direction direction, Random random)
+        public string Attack(Direction direction, Random random)
         {
+            string output = "";
             if(equippedWeapon != null)
             {
-                equippedWeapon.Attack(direction, random);
+                output += equippedWeapon.Attack(direction, random);
 
                 //if the weapon is a potion it is removed from the inventory
                 if(equippedWeapon is IPotion)
@@ -87,6 +105,11 @@ namespace Quest
                     equippedWeapon = null;
                 }
             }
+            else
+            {
+                output += "The player does not have a weapon equipped" + Environment.NewLine;
+            }
+            return output;
         }
     }
 }

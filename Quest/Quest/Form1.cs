@@ -42,21 +42,22 @@ namespace Quest
         private void Form1_Load(object sender, EventArgs e)
         {
             game = new Game(new Rectangle(120, 80, 720, 240));
-            game.NewLevel(random);
+            outputText.Text = game.NewLevel(random);
             UpdateCharacters();
         }
 
         //Move in a dirction around the screen
         private void MoveCharacter(Direction direction)
         {
-            game.Move(direction, random);
+            //using append text to automatically scroll the text box to the bottom of the text
+            outputText.AppendText(game.Move(direction, random));
             UpdateCharacters();
         }
 
         //attack in a direction around the screen
         private void CharacterAttack(Direction direction)
         {
-            game.Attack(direction, random);
+            outputText.AppendText(game.Attack(direction, random));
             UpdateCharacters();
         }
 

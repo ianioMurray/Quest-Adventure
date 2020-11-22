@@ -24,14 +24,16 @@ namespace Quest
             }
         }
 
-        public override void Attack(Direction direction, Random random)
+        public override string Attack(Direction direction, Random random)
         {
+            PlayerAttack attack = new PlayerAttack();
             int possibleAttackDirections = 4;
             Direction attackDirection = direction;
 
             for (int i = 0; i < possibleAttackDirections; i++)
             {
-                if(DamageEnermy(attackDirection, MaceAttackRange, 6, random))
+                attack = DamageEnermy(attackDirection, MaceAttackRange, 6, random);
+                if (attack.successfulAttack)
                 {
                     break;
                 }
@@ -48,6 +50,7 @@ namespace Quest
                     }
                 }
             }
+            return attack.attackResultDescription;
         }
     }
 }

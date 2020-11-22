@@ -22,9 +22,11 @@ namespace Quest
             }
         }
 
-        public override void Attack(Direction direction, Random random)
+        public override string Attack(Direction direction, Random random)
         {
-            DamageEnermy(direction, BowAttackRange, 1, random);
+            PlayerAttack attack = new PlayerAttack();
+            attack = DamageEnermy(direction, BowAttackRange, 1, random);
+            return attack.attackResultDescription;
         }
     }
 }

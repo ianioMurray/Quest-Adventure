@@ -23,10 +23,11 @@ namespace Quest
 
         public abstract string Name { get; }
 
-        public abstract void Attack(Direction direction, Random random);
+        public abstract string Attack(Direction direction, Random random);
 
-        protected bool DamageEnermy(Direction direction, int range, int damage, Random random)
+        protected PlayerAttack DamageEnermy(Direction direction, int range, int damage, Random random)
         {
+            PlayerAttack attack = new PlayerAttack();
             //creates a temp variable that stores the players position
             Point tempPlayerLocation = game.PlayerLocation;
             //loop to see if the enermy is in range to attack.  distance = 0 will check if the player 
@@ -39,14 +40,15 @@ namespace Quest
                 {
                     if(Nearby(tempPlayerLocation, enermy.Location, distance))
                     {
-                        enermy.Hit(damage, random);
-                        return true;
+                        attack.attackResultDescription = enermy.Hit(damage, random);
+                        attack.successfulAttack = true;
+                        return attack;
                     }
                 }
                 //this move() does not move the player it simply stores the location one move in the direction of the attack 
                 tempPlayerLocation = Move(direction, tempPlayerLocation, game.Bourdaries);
             }
-            return false;
+            return attack;
         }
     }
 }

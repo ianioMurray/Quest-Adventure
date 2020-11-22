@@ -22,9 +22,13 @@ namespace Quest
             }
         }
 
-        public override void Attack(Direction direction, Random random)
+        public override string Attack(Direction direction, Random random)
         {
-            if (!DamageEnermy(direction, SwordAttackRange, 3, random))
+            PlayerAttack attack = new PlayerAttack();
+
+            attack = DamageEnermy(direction, SwordAttackRange, 3, random);
+
+            if (!attack.successfulAttack)
             {
                 //try and attack clockwise from original direction
                 //Direction is an enum where clockwise is always + 1
@@ -34,7 +38,9 @@ namespace Quest
                 {
                     clockwise = 0;
                 }
-                if (!DamageEnermy((Direction)clockwise, SwordAttackRange, 3, random))
+                attack = DamageEnermy((Direction)clockwise, SwordAttackRange, 3, random);
+
+                if (!attack.successfulAttack)
                 {
                     //Direction is an enum where counterclockwise is always - 1
                     //if the direction is Up - then reset it to 3 (Left)
@@ -43,9 +49,10 @@ namespace Quest
                     {
                         counterclockwise = 3;
                     }
-                    DamageEnermy((Direction)counterclockwise, SwordAttackRange, 3, random);
+                    attack = DamageEnermy((Direction)counterclockwise, SwordAttackRange, 3, random);
                 }
             }
+            return attack.attackResultDescription;
         }
     }
 }

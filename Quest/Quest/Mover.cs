@@ -37,7 +37,7 @@ namespace Quest
             int distanceBetweenXLocations = Math.Abs(myLocation.X - locationToCheck.X);
             int distanceBetweenYLocations = Math.Abs(myLocation.Y - locationToCheck.Y);
 
-            //return true if items locations are 1 grid space apart but ONLY in the vertical or horizontal NOT diagonal
+            //return true if items locations are equal or less then the the distance measured in grid spaces apart 
             if (distanceBetweenXLocations <= distance && distanceBetweenYLocations <= distance)
             {
                 return true;

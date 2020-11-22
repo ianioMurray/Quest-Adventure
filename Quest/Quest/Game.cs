@@ -64,14 +64,16 @@ namespace Quest
             player = new Player(this, new Point(boundaries.Left, boundaries.Top + 120));
         }
 
-        public void Move(Direction direction, Random  random)
+        public string Move(Direction direction, Random  random)
         {
-            player.Move(direction);
+            string output = "";
+            output = player.Move(direction);
 
             foreach(Enermy enermy in Enermies)
             {
-                enermy.Move(random);
+                output += enermy.Move(random);
             }
+            return output;
         }
 
         public void Equip(string weaponName)
@@ -84,23 +86,25 @@ namespace Quest
             return player.Weapons.Contains(weaponName);
         }
 
-        public void HitPlayer(int maxDamage, Random random)
+        public int HitPlayer(int maxDamage, Random random)
         {
-            player.Hit(maxDamage, random);
+            return player.Hit(maxDamage, random);
         }
 
-        public void IncreasePlayerHealth(int health, Random random)
+        public string IncreasePlayerHealth(int health, Random random)
         {
-            player.IncreaseHealth(health, random);
+            return player.IncreaseHealth(health, random);
         }
 
-        public void Attack(Direction direction, Random random)
+        public string Attack(Direction direction, Random random)
         {
-            player.Attack(direction, random);    
+            string output = "";
+            output += player.Attack(direction, random);    
             foreach(Enermy enermy in Enermies)
             {
-                enermy.Move(random);
+                output += enermy.Move(random);
             }
+            return output;
         }
 
         private Point GetRandomLocation(Random random)
@@ -108,11 +112,12 @@ namespace Quest
             return new Point(boundaries.Left + (random.Next(13) * 60), boundaries.Top + (random.Next(5) * 60));
         }
 
-        public void NewLevel(Random random)
+        public string NewLevel(Random random)
         {
             level++;
             List<string> monsters = new List<string>();
             List<string> weapons = new List<string>();
+            string output = "";
 
             switch (level)
             {
@@ -123,7 +128,6 @@ namespace Quest
                 case 2:
                     monsters.Add("Ghost" );
                     weapons.Add("BluePotion");
-
                     break;
                 case 3:
                     monsters.Add("Ghoul");
@@ -159,7 +163,38 @@ namespace Quest
             }
             SetMonsterInRoom(monsters, random);
             SetWeapon(weapons, random);
+
+           return CreateStartingOutput(monsters, level);
         }
+
+        public string CreateStartingOutput(List<string> monsters, int level)
+        {
+            string output = "You are on level " + level + " of the dungeon" + Environment.NewLine +
+                 "There is a ";
+
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                //if number of monsters is greater than 1 and this is the last monster then add the word and before the monster name 
+                if (monsters.Count != 1 && i == monsters.Count - 1)
+                {
+                    output += " and ";
+                }
+                //if number of monsters is greater than 1 and this is not the first one then add a comma between each of them
+                else if (monsters.Count != 1 && i != 0)
+                {
+                    output += ", ";
+                }
+
+                output += monsters[i];
+            }
+
+            output += " in the room and there is a " + WeaponInRoom.Name + " lying on the floor" + Environment.NewLine;
+
+            return output;
+        }
+
+
+
 
         public void SetMonsterInRoom(IEnumerable<string> monsters, Random random)
         {
