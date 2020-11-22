@@ -53,26 +53,6 @@ namespace Quest
             UpdateCharacters();
         }
 
-        private void moveUpButton_Click(object sender, EventArgs e)
-        {
-            MoveCharacter(Direction.Up);
-        }
-
-        private void moveRightButton_Click(object sender, EventArgs e)
-        {
-            MoveCharacter(Direction.Right);
-        }
-
-        private void moveDownButton_Click(object sender, EventArgs e)
-        {
-            MoveCharacter(Direction.Down);
-        }
-
-        private void moveLeftButton_Click(object sender, EventArgs e)
-        {
-            MoveCharacter(Direction.Left);
-        }
-
         //attack in a direction around the screen
         private void CharacterAttack(Direction direction)
         {
@@ -80,46 +60,50 @@ namespace Quest
             UpdateCharacters();
         }
 
-        private void attackUpButton_Click(object sender, EventArgs e)
-        {
-            CharacterAttack(Direction.Up);
-        }
-
-        private void attackRightButton_Click(object sender, EventArgs e)
-        {
-            CharacterAttack(Direction.Right);
-        }
-
-        private void attackDownButton_Click(object sender, EventArgs e)
-        {
-            CharacterAttack(Direction.Down);
-        }
-
-        private void attackLeftButton_Click(object sender, EventArgs e)
-        {
-            CharacterAttack(Direction.Left);
-        }
-
         //Update the UI with weapons/characters/enermies 
         private void UpdateCharacters()
+        {
+            UpdatePlayerUI();
+            int enermiesShown = UpdateEnermyUI();
+            UpdateWeaponUI();
+ 
+
+            if(game.PlayerHitPoints <= 0 )
+            {
+                MessageBox.Show("You died");
+                Application.Exit();
+            }
+
+            if(enermiesShown < 1)
+            {
+                MessageBox.Show("you have defeated the enermies on this level");
+                game.NewLevel(random);
+                UpdateCharacters();
+            }
+        }
+
+        private void UpdatePlayerUI()
         {
             //player image location and Hit Points 
             PlayerImage.Location = game.PlayerLocation;
             playerHitPoints.Text = game.PlayerHitPoints.ToString();
+        }
 
-            //Enermy's image is visible or not variables - then other enermy stuff
+        private int UpdateEnermyUI()
+        {
+            //Goes through enermies making them visible or not and showing other details about them
             bool showBat = false;
             bool showGhost = false;
             bool showGhoul = false;
             int enermiesShown = 0;
 
-            foreach(Enermy enermy in game.Enermies)
+            foreach (Enermy enermy in game.Enermies)
             {
-                if(enermy is Bat)
+                if (enermy is Bat)
                 {
                     BatImage.Location = enermy.Location;
                     batHitPoints.Text = enermy.HitPoints.ToString();
-                    if(enermy.HitPoints > 0)
+                    if (enermy.HitPoints > 0)
                     {
                         showBat = true;
                         enermiesShown++;
@@ -147,43 +131,51 @@ namespace Quest
                 }
             }
 
-            if(!showBat)
+            if (!showBat)
             {
                 BatImage.Visible = false;
+                batHitPoints.Text = "N/A";
             }
             else
             {
                 BatImage.Visible = true;
             }
 
-            if(!showGhost)
+            if (!showGhost)
             {
                 GhostImage.Visible = false;
+                ghostHitPoints.Text = "N/A";
             }
             else
             {
                 GhostImage.Visible = true;
             }
 
-            if(!showGhoul)
+            if (!showGhoul)
             {
                 GhoulImage.Visible = false;
+                ghoulHitPoints.Text = "N/A";
             }
             else
             {
                 GhoulImage.Visible = true;
             }
 
-            //weapons stuff - game arena
+            return enermiesShown;
+        }
+
+        private void UpdateWeaponUI()
+        {
             SwordImage.Visible = false;
             MaceImage.Visible = false;
             BowImage.Visible = false;
             RedPotionImage.Visible = false;
             BluePotionImage.Visible = false;
 
+            //choose which weapon will appear on this level
             Control weaponControl = null;
 
-            switch(game.WeaponInRoom.Name)
+            switch (game.WeaponInRoom.Name)
             {
                 case "Sword":
                     weaponControl = SwordImage;
@@ -204,18 +196,10 @@ namespace Quest
                     throw new Exception("Unknown weapon type");
             }
 
-            weaponControl.Visible = true;
-
-            //weapon stuff inventory
-            UpdateInventoryWithVisibleWeapon("Sword", inventorySword);
-            UpdateInventoryWithVisibleWeapon("Mace", inventoryMace);
-            UpdateInventoryWithVisibleWeapon("Bow", inventoryBow);
-            UpdateInventoryWithVisibleWeapon("Red Potion", inventoryRedPotion);
-            UpdateInventoryWithVisibleWeapon("Blue Potion", inventoryBluePotion);
-
+            //make the weapon visible in the game grid unless it has been picked up
             weaponControl.Location = game.WeaponInRoom.Location;
 
-            if(game.WeaponInRoom.PickedUp)
+            if (game.WeaponInRoom.PickedUp)
             {
                 weaponControl.Visible = false;
             }
@@ -224,24 +208,19 @@ namespace Quest
                 weaponControl.Visible = true;
             }
 
+            //Update the inventory so that the weapons the player has appear or those they dont do not appear
+            UpdateInventoryWithVisibleWeapon("Sword", inventorySword);
+            UpdateInventoryWithVisibleWeapon("Mace", inventoryMace);
+            UpdateInventoryWithVisibleWeapon("Bow", inventoryBow);
+            UpdateInventoryWithVisibleWeapon("Red Potion", inventoryRedPotion);
+            UpdateInventoryWithVisibleWeapon("Blue Potion", inventoryBluePotion);
+
+            //if the player has only 1 weapon in their inventory equip it automatically
             List<string> weapons = (List<string>)game.PlayerWeapons;
 
-            if (weapons.Count ==1 )
+            if (weapons.Count == 1)
             {
                 EquipInventoryItem(weapons[0]);
-            }
-
-            if(game.PlayerHitPoints <= 0 )
-            {
-                MessageBox.Show("You died");
-                Application.Exit();
-            }
-
-            if(enermiesShown < 1)
-            {
-                MessageBox.Show("you have defeated the enermies on this level");
-                game.NewLevel(random);
-                UpdateCharacters();
             }
         }
 
@@ -257,9 +236,7 @@ namespace Quest
             }
         }
 
-
-
-        //If a player clicks on an inventory item then equip it 
+        //Equip the selected weapon held in the inventory
         private void EquipInventoryItem(string weaponName)
         {
             if (game.CheckPlayerInventory(weaponName))
@@ -269,6 +246,116 @@ namespace Quest
             }
         }
 
+
+
+
+        //Decides what the border should look like for a weapon in the inventory 
+        //and changes attack arrows if weapon is a potion 
+        private void SetWeaponBorderStyle(string weapon)
+        {
+            RemoveInventoryBorderStyle();
+            MakeAttackButtonsVisible();
+
+            switch (weapon)
+            {
+                case "Sword":
+
+                    inventorySword.BorderStyle = BorderStyle.FixedSingle;
+                    break;
+                case "Mace":
+                    inventoryMace.BorderStyle = BorderStyle.FixedSingle;
+                    break;
+                case "Bow":
+                    inventoryBow.BorderStyle = BorderStyle.FixedSingle;
+                    break;
+                case "Red Potion":
+                    inventoryRedPotion.BorderStyle = BorderStyle.FixedSingle;
+                    AttackButtonsUpdateDueToPotionEquipped();
+                    break;
+                case "Blue Potion":
+                    inventoryBluePotion.BorderStyle = BorderStyle.FixedSingle;
+                    AttackButtonsUpdateDueToPotionEquipped();
+                    break;
+                default:
+                    throw new Exception("Inventory Border Style Exeception - No such weapon");
+            }
+        }
+
+        private void RemoveInventoryBorderStyle()
+        {
+            inventorySword.BorderStyle = BorderStyle.None;
+            inventoryMace.BorderStyle = BorderStyle.None;
+            inventoryBow.BorderStyle = BorderStyle.None;
+            inventoryRedPotion.BorderStyle = BorderStyle.None;
+            inventoryBluePotion.BorderStyle = BorderStyle.None;
+        }
+
+        private void MakeAttackButtonsVisible()
+        {
+            attackUpButton.Visible = true;
+            attackRightButton.Visible = true;
+            attackDownButton.Visible = true;
+            attackLeftButton.Visible = true;
+
+            attackUpButton.Font = new Font("Microsoft Sans Serif",12);
+            attackUpButton.Text = "↑";
+        }
+
+        private void AttackButtonsUpdateDueToPotionEquipped()
+        {
+            attackUpButton.Visible = true;
+            attackRightButton.Visible = false;
+            attackDownButton.Visible = false;
+            attackLeftButton.Visible = false;
+
+            attackUpButton.Font = new Font("Microsoft Sans Serif", 8);
+            attackUpButton.Text = "Drink";
+        }
+
+        //handles actions when MOVE arrow selected 
+        private void moveUpButton_Click(object sender, EventArgs e)
+        {
+            MoveCharacter(Direction.Up);
+        }
+
+        private void moveRightButton_Click(object sender, EventArgs e)
+        {
+            MoveCharacter(Direction.Right);
+        }
+
+        private void moveDownButton_Click(object sender, EventArgs e)
+        {
+            MoveCharacter(Direction.Down);
+        }
+
+        private void moveLeftButton_Click(object sender, EventArgs e)
+        {
+            MoveCharacter(Direction.Left);
+        }
+
+
+        //handles actions when ATTACT control selected
+        private void attackUpButton_Click(object sender, EventArgs e)
+        {
+            CharacterAttack(Direction.Up);
+        }
+
+        private void attackRightButton_Click(object sender, EventArgs e)
+        {
+            CharacterAttack(Direction.Right);
+        }
+
+        private void attackDownButton_Click(object sender, EventArgs e)
+        {
+            CharacterAttack(Direction.Down);
+        }
+
+        private void attackLeftButton_Click(object sender, EventArgs e)
+        {
+            CharacterAttack(Direction.Left);
+        }
+
+        //handles action when WEAPON in INVENTORY is selected 
         private void inventorySword_DoubleClick(object sender, EventArgs e)
         {
             EquipInventoryItem("Sword");
@@ -294,77 +381,8 @@ namespace Quest
             EquipInventoryItem("Red Potion");
         }
 
-        private void EquipWeapon(string weapon)
-        {
-            if (game.CheckPlayerInventory(weapon))
-            {
-                game.Equip(weapon);
-                SetWeaponBorderStyle(weapon);
-            }
-        }
 
-        //set border style of equiped item
-        private void SetWeaponBorderStyle(string weapon)
-        {
-            RemoveInventoryBorderStyle();
-            MakeAttackButtonsVisible();
-
-            switch (weapon)
-            {
-                case "Sword":
-                    
-                    inventorySword.BorderStyle = BorderStyle.FixedSingle;
-                    break;
-                case "Mace":
-                    inventoryMace.BorderStyle = BorderStyle.FixedSingle;
-                    break;
-                case "Bow":
-                    inventoryBow.BorderStyle = BorderStyle.FixedSingle;
-                    break;
-                case "Red Potion":
-                    inventoryRedPotion.BorderStyle = BorderStyle.FixedSingle;
-                    AttackButtonsUpdateDueToPotionEquipped();
-                    break;
-                case "Blue Potion":
-                    inventoryBluePotion.BorderStyle = BorderStyle.FixedSingle;
-                    AttackButtonsUpdateDueToPotionEquipped();
-                    break;
-                default:
-                    throw new Exception("Inventory Border Style Exeception - No such weapon");
-            }
-            
-        }
-
-        private void RemoveInventoryBorderStyle()
-        {
-            inventorySword.BorderStyle = BorderStyle.None;
-            inventoryMace.BorderStyle = BorderStyle.None;
-            inventoryBow.BorderStyle = BorderStyle.None;
-            inventoryRedPotion.BorderStyle = BorderStyle.None;
-            inventoryBluePotion.BorderStyle = BorderStyle.None;
-        }
-
-        private void MakeAttackButtonsVisible()
-        {
-            attackUpButton.Visible = true;
-            attackRightButton.Visible = true;
-            attackDownButton.Visible = true;
-            attackLeftButton.Visible = true;
-
-            attackUpButton.Text = "↑";
-        }
-
-        private void AttackButtonsUpdateDueToPotionEquipped()
-        {
-            attackUpButton.Visible = true;
-            attackRightButton.Visible = false;
-            attackDownButton.Visible = false;
-            attackLeftButton.Visible = false;
-
-            attackUpButton.Text = "Drink";
-        }
-
-
+        //HANDLES UI STYLING
 
         //Making the move / attack buttons 3D
         private void buttonDown(object sender)

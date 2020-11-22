@@ -29,8 +29,7 @@ namespace Quest
                     directionToMove = (Direction)random.Next(Enum.GetValues(typeof(Direction)).Length);
                 }
 
-                //base.location = 
-                    base.Move(directionToMove, game.Bourdaries);
+                base.location = base.Move(directionToMove, game.Bourdaries);
 
                 if (NearPlayer(attackRange, random))
                 {
