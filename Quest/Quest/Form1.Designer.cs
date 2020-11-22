@@ -62,6 +62,8 @@
             this.attackLeftButton = new System.Windows.Forms.Button();
             this.attackUpButton = new System.Windows.Forms.Button();
             this.outputText = new System.Windows.Forms.TextBox();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PlayerImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BatImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GhoulImage)).BeginInit();
@@ -553,6 +555,26 @@
             this.outputText.Size = new System.Drawing.Size(510, 80);
             this.outputText.TabIndex = 17;
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(839, 30);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(96, 21);
+            this.saveButton.TabIndex = 18;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(839, 57);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(96, 21);
+            this.loadButton.TabIndex = 19;
+            this.loadButton.Text = "Load";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -561,6 +583,8 @@
             this.BackgroundImage = global::Quest.Properties.Resources.dungeon600x400;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1025, 633);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.outputText);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -644,6 +668,8 @@
         private System.Windows.Forms.Button attackLeftButton;
         private System.Windows.Forms.Button attackUpButton;
         private System.Windows.Forms.TextBox outputText;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
     }
 }
 

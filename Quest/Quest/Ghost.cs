@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     class Ghost : Enermy
     {
         private int attackRange = 1;

@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     abstract class Mover
     {
         private const int MoveInterval = 60;

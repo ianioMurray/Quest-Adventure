@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     abstract class Enermy : Mover
     {
         public int HitPoints { get; private set; }

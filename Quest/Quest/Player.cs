@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     class Player : Mover
     {
         private Weapon equippedWeapon;

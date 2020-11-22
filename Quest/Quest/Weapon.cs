@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     abstract class Weapon : Mover
     {
         public bool PickedUp { get; private set; }

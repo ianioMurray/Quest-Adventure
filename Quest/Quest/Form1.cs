@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Quest
 {
@@ -17,7 +19,6 @@ namespace Quest
         Down = 2,
         Left = 3
     }
-
 
     public partial class Form1 : Form
     {
@@ -558,6 +559,25 @@ namespace Quest
         {
             moveLeftButtonDown = false;
             buttonDown(sender);
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            using (Stream output = File.Create(Directory.GetCurrentDirectory() + @"\Save.dat"))
+            {
+                BinaryFormatter format = new BinaryFormatter();
+                format.Serialize(output, game);
+            }
+        }
+
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            using (Stream input = File.OpenRead(Directory.GetCurrentDirectory() + @"\Save.dat"))
+            {
+                BinaryFormatter format = new BinaryFormatter();
+                game = (Game)format.Deserialize(input);
+                UpdateCharacters();
+            }
         }
     }
 }

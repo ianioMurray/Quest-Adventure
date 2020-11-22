@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     class Game
     {
         public IEnumerable<Enermy> Enermies { get; private set; } 

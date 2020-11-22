@@ -7,6 +7,7 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
 
     class Mace : Weapon
     {

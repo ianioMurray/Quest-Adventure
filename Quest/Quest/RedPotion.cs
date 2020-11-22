@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     class RedPotion : Weapon, IPotion
     {
         public bool Used { get; private set;  }

@@ -7,6 +7,8 @@ using System.Drawing;
 
 namespace Quest
 {
+    [Serializable]
+
     class Bow : Weapon
     {
         private const int BowAttackRange = 3;
