@@ -33,7 +33,7 @@ namespace Quest
        
         public Player(Game game, Point location) : base(game, location)
         {
-            HitPoints = 10;
+            HitPoints = 30;
         }
 
         public int Hit(int maxDamage, Random random)
@@ -112,6 +112,11 @@ namespace Quest
                 output += "The player does not have a weapon equipped" + Environment.NewLine;
             }
             return output;
+        }
+
+        public void SetPlayerForLevelStart(Point location)
+        {
+            base.location = location;
         }
     }
 }

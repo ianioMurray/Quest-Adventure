@@ -11,6 +11,8 @@ namespace Quest
 
     class Game
     {
+        private const string typeWeapon = "weapon";
+        private const string typeEnermy = "enermy";
         public IEnumerable<Enermy> Enermies { get; private set; } 
         public Weapon WeaponInRoom { get; private set; }
 
@@ -109,9 +111,24 @@ namespace Quest
             return output;
         }
 
-        private Point GetRandomLocation(Random random)
+        private Point GetRandomLocation(Random random, string type)
         {
-            return new Point(boundaries.Left + (random.Next(13) * 60), boundaries.Top + (random.Next(5) * 60));
+            //return a random position for the enermy/weapon
+            //to give the player a chance 
+            //if its the first level make the monster appear at the far side of the room
+            //if its the first level make the weapon appear on the player side of the room
+            if(type == typeEnermy && level == 1)
+            {
+                return new Point(boundaries.Left + ((random.Next(7, 13) * 60)), boundaries.Top + (random.Next(5) * 60));
+            }
+            if (type == typeWeapon && level == 1)
+            {
+                return new Point(boundaries.Left + ((random.Next(6) * 60)), boundaries.Top + (random.Next(5) * 60));
+            }
+            else
+            {
+                return new Point(boundaries.Left + (random.Next(13) * 60), boundaries.Top + (random.Next(5) * 60));
+            }
         }
 
         public string NewLevel(Random random)
@@ -119,7 +136,7 @@ namespace Quest
             level++;
             List<string> monsters = new List<string>();
             List<string> weapons = new List<string>();
-            string output = "";
+            player.SetPlayerForLevelStart(new Point(boundaries.Left, boundaries.Top + 120));
 
             switch (level)
             {
@@ -206,13 +223,13 @@ namespace Quest
                 switch(monster)
                 {
                     case "Bat":
-                        tempEnermies.Add(new Bat(this, GetRandomLocation(random)));
+                        tempEnermies.Add(new Bat(this, GetRandomLocation(random, typeEnermy)));
                         break;
                     case "Ghost":
-                        tempEnermies.Add(new Ghost(this, GetRandomLocation(random)));
+                        tempEnermies.Add(new Ghost(this, GetRandomLocation(random, typeEnermy)));
                         break;
                     case "Ghoul":
-                        tempEnermies.Add(new Ghoul(this, GetRandomLocation(random)));
+                        tempEnermies.Add(new Ghoul(this, GetRandomLocation(random, typeEnermy)));
                         break;
                     default:
                         throw new Exception("Unknown Monster Expection");
@@ -234,19 +251,19 @@ namespace Quest
                     switch(weapon)
                     {
                         case "Sword":
-                            WeaponInRoom = new Sword(this, GetRandomLocation(random));
+                            WeaponInRoom = new Sword(this, GetRandomLocation(random, typeWeapon));
                             return;
                         case "Mace":
-                            WeaponInRoom = new Mace(this, GetRandomLocation(random));
+                            WeaponInRoom = new Mace(this, GetRandomLocation(random, typeWeapon));
                             return;
                         case "Bow":
-                            WeaponInRoom = new Bow(this, GetRandomLocation(random));
+                            WeaponInRoom = new Bow(this, GetRandomLocation(random, typeWeapon));
                             return;
                         case "BluePotion":
-                            WeaponInRoom = new BluePotion(this, GetRandomLocation(random));
+                            WeaponInRoom = new BluePotion(this, GetRandomLocation(random, typeWeapon));
                             return;
                         case "RedPotion":
-                            WeaponInRoom = new RedPotion(this, GetRandomLocation(random));
+                            WeaponInRoom = new RedPotion(this, GetRandomLocation(random, typeWeapon));
                             return;
                         default:
                             throw new Exception("Unknown weapon type");
